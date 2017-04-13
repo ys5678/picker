@@ -16,47 +16,55 @@ class PickerAddress extends React.Component {
     super();
     this.props = props;
     this.address = [];
-  }
-
-  initDefaultData () {
-    this.data = {
+    this.state = {
       provins: {
         list: provins,
         defaultValue: this.props.defaultValue[0],
         displayValue (name) {
           return name;
-        }
+        },
       },
       citys: {
         list: citys[this.props.defaultValue[0]],
         defaultValue: this.props.defaultValue[1],
         displayValue (name) {
           return name;
-        }
+        },
       },
       areas: {
         list: areas[this.props.defaultValue[1]],
         defaultValue: this.props.defaultValue[2],
         displayValue (name) {
           return name;
-        }
-      }
-    }
+        },
+      },
+    };
   }
 
   handleChangeProvin (provin) {
-    this.data.provins = {
-      list: provins,
-      defaultValue: provin,
-    };
-    this.data.citys = {
-      list: citys[provin],
-      defaultValue: citys[provin][0],
-    };
-    this.data.areas = {
-      list: areas[citys[provin][0]],
-      defaultValue: areas[citys[provin][0]][0],
-    },
+    this.setState({
+      provins: {
+        list: provins,
+        defaultValue: provin,
+        displayValue (name) {
+          return name;
+        },
+      },
+      citys: {
+        list: citys[provin],
+        defaultValue: citys[provin][0],
+        displayValue (name) {
+          return name;
+        },
+      },
+      areas: {
+        list: areas[citys[provin][0]],
+        defaultValue: areas[citys[provin][0]][0],
+        displayValue (name) {
+          return name;
+        },
+      },
+    })
     this.address = [];
     this.address.push(provin);
     this.address.push(citys[provin][0]);
@@ -67,10 +75,15 @@ class PickerAddress extends React.Component {
   handleChangeCity(city) {
     this.address[1] = city;
     this.address[2] = areas[city][0];
-    this.data.areas = {
-      list: areas[city],
-      defaultValue: areas[city][0],
-    };
+    this.setState({
+      areas: {
+        list: areas[city],
+        defaultValue: areas[city][0],
+        displayValue (name) {
+          return name;
+        },
+      },
+    })
     this.props.onChange(this.address);
   }
 
@@ -88,7 +101,6 @@ class PickerAddress extends React.Component {
   }
 
   render () {
-    this.initDefaultData();
     return <div className="ui-picker-address">
       <Popup
         onConfirm={this.handleClose.bind(this)}
